@@ -4,8 +4,7 @@
 #include <vector>
 #include <stdexcept>
 #include <functional>
-#include "common-includes.hpp"
-#include "vkextensions.hpp"
+#include "common.hpp"
 
 class HelloTriangleApplication
 {

@@ -1,12 +1,9 @@
-#ifndef __COMMON_INCLUDES_HPP__
-#define __COMMON_INCLUDES_HPP__
+#ifndef __COMMON_HPP__
+#define __COMMON_HPP__
 
-#include <vector>
-
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
-
+#include "base-includes.hpp"
 #include "deleter.hpp"
+#include "vkextensions.hpp"
 
 const int WIDTH  = 800;
 const int HEIGHT = 600;

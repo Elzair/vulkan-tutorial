@@ -1,7 +1,7 @@
 #ifndef __DELETER_HPP__
 #define __DELETER_HPP__
 
-#include "common-includes.hpp"
+#include "base-includes.hpp"
 
 template < typename T >
 class VDeleter

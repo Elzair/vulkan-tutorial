@@ -1,7 +1,7 @@
 #ifndef __VKEXTENSIONS_HPP__
 #define __VKEXTENSIONS_HPP__
 
-#include "common-includes.hpp"
+#include "base-includes.hpp"
 
 VkResult CreateDebugReportCallbackEXT(
   VkInstance                                instance,
