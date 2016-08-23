@@ -19,18 +19,6 @@ public:
   }
 
 private:
-  const int WIDTH  = 800;
-  const int HEIGHT = 600;
-
-  const std::vector<const char*> validation_layers = {
-    "VK_LAYER_LUNARG_standard_validation"
-  };
-
-#ifdef NDEBUG
-  const bool enable_validation_layers = false;
-#else
-  const bool enable_validation_layers = true;
-#endif
 
   GLFWwindow*                        window;
   VDeleter<VkInstance>               instance { vkDestroyInstance };
@@ -69,7 +57,7 @@ private:
   void createInstance(  )
   {
     // Ensure validation layers are available
-    if ( this->enable_validation_layers && !this->checkValidationLayerSupport() )
+    if ( enable_validation_layers && !this->checkValidationLayerSupport() )
     {
       throw std::runtime_error( "Validation layers requested but are not available!" );
     }
@@ -88,10 +76,10 @@ private:
     auto vkextensions = this->getRequiredExtensions();
     crinfo.enabledExtensionCount = vkextensions.size();
     crinfo.ppEnabledExtensionNames = vkextensions.data();
-    if ( this->enable_validation_layers )
+    if ( enable_validation_layers )
     {
-      crinfo.enabledLayerCount   = this->validation_layers.size(  );
-      crinfo.ppEnabledLayerNames = this->validation_layers.data(  );
+      crinfo.enabledLayerCount   = validation_layers.size(  );
+      crinfo.ppEnabledLayerNames = validation_layers.data(  );
     }
     else
     {
@@ -127,7 +115,7 @@ private:
     std::vector<VkLayerProperties> available_layers( layer_count );
     vkEnumerateInstanceLayerProperties( &layer_count, available_layers.data(  ) );
 
-    for ( const char* layer : this->validation_layers )
+    for ( const char* layer : validation_layers )
     {
       bool found = false;
 
@@ -194,10 +182,10 @@ private:
     devcrinfo.queueCreateInfoCount = 1;
     devcrinfo.pEnabledFeatures = &dev_features;
     devcrinfo.enabledExtensionCount = 0;
-    if ( this->enable_validation_layers )
+    if ( enable_validation_layers )
     {
-      devcrinfo.enabledLayerCount = this->validation_layers.size(  );
-      devcrinfo.ppEnabledLayerNames = this->validation_layers.data(  );
+      devcrinfo.enabledLayerCount = validation_layers.size(  );
+      devcrinfo.ppEnabledLayerNames = validation_layers.data(  );
     }
     else
     {
@@ -225,7 +213,7 @@ private:
       extensions.push_back( glfw_extensions[ i ] );
     }
 
-    if ( this->enable_validation_layers )
+    if ( enable_validation_layers )
     {
       extensions.push_back( VK_EXT_DEBUG_REPORT_EXTENSION_NAME );
     }
@@ -258,7 +246,7 @@ private:
 
   void createDebugCallback()
   {
-    if ( !this->enable_validation_layers )
+    if ( !enable_validation_layers )
     {
       return;
     }

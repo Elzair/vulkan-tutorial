@@ -14,8 +14,6 @@ public:
   }
 
 private:
-  const int WIDTH  = 800;
-  const int HEIGHT = 600;
   GLFWwindow* window;
   
   void initWindow()
