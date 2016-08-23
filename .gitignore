@@ -1,2 +1,5 @@
 build/
 *.o
+GPATH
+GRTAGS
+GTAGS
