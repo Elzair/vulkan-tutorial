@@ -48,12 +48,6 @@ if(GLSLANGVALIDATOR_EXECUTABLE)
                   OUTPUT_VARIABLE glslangValidator_version
                   ERROR_QUIET
                   OUTPUT_STRIP_TRAILING_WHITESPACE)
-  if (glslangValidator_version MATCHES "^Glslang Version: SPIRV")
-    string(REPLACE "Glslang Version: SPIRV" "" glslangValidator_version2 "${glslangValidator_version}")
-    string(REPLACE " *" "" GLSLANGVALIDATOR_VERSION_STRING "${glslangValidator_version2}")
-  endif()
-  unset(glslangValidator_version)
-  unset(glslangValidator_version2)
 endif()
 
 # Handle the QUIETLY and REQUIRED arguments and set GLSLangValidator_FOUND to TRUE if
@@ -61,5 +55,4 @@ endif()
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(GLSLangValidator
-                                  REQUIRED_VARS GLSLANGVALIDATOR_EXECUTABLE
-                                  VERSION_VAR GLSLANGVALIDATOR_VERSION_STRING)
+                                  REQUIRED_VARS GLSLANGVALIDATOR_EXECUTABLE)
