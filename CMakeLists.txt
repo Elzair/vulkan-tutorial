@@ -9,9 +9,10 @@ project(Tutorial)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH}")
 include(AppendCmakeInstallRPath)
 include(FindVulkan)
+include(CompileShader)
 
 #find_package(Git REQUIRED)
-find_package(Vulkan)
+find_package(Vulkan REQUIRED)
 
 find_package(PkgConfig REQUIRED)
 
