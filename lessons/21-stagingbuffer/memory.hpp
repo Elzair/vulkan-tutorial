@@ -4,7 +4,7 @@
 #include "base-includes.hpp"
 
 uint32_t findMemoryType( VkPhysicalDevice      physical,
-                         uint32_t              type_filter,
+                         uint32_t              typeFilter,
                          VkMemoryPropertyFlags props )
 {
   VkPhysicalDeviceMemoryProperties memprops;
@@ -12,7 +12,7 @@ uint32_t findMemoryType( VkPhysicalDevice      physical,
 
   for ( uint32_t i = 0; i < memprops.memoryTypeCount; i++ )
   {
-    if ( ( type_filter & ( 1 << i ) ) &&
+    if ( ( typeFilter & ( 1 << i ) ) &&
          ( memprops.memoryTypes[i].propertyFlags & props ) == props )
     {
       return i;

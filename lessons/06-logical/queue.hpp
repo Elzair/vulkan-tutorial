@@ -5,11 +5,11 @@
 
 struct QueueFamilyIndices
 {
-  int graphics_family = -1;
+  int graphicsFamily = -1;
 
   bool isComplete(  )
   {
-    return this->graphics_family >= 0;
+    return this->graphicsFamily >= 0;
   }
 };
 
@@ -17,17 +17,17 @@ QueueFamilyIndices findQueueFamilies( VkPhysicalDevice device )
 {
   QueueFamilyIndices indices;
 
-  uint32_t qf_count = 0;
-  vkGetPhysicalDeviceQueueFamilyProperties( device, &qf_count, nullptr );
-  std::vector<VkQueueFamilyProperties> qfamilies( qf_count );
-  vkGetPhysicalDeviceQueueFamilyProperties( device, &qf_count, qfamilies.data() );
+  uint32_t qfCount = 0;
+  vkGetPhysicalDeviceQueueFamilyProperties( device, &qfCount, nullptr );
+  std::vector<VkQueueFamilyProperties> qfamilies( qfCount );
+  vkGetPhysicalDeviceQueueFamilyProperties( device, &qfCount, qfamilies.data() );
 
   int i = 0;
   for ( const auto& qfamily : qfamilies )
   {
     if ( qfamily.queueCount > 0 && qfamily.queueFlags & VK_QUEUE_GRAPHICS_BIT )
     {
-      indices.graphics_family = i;
+      indices.graphicsFamily = i;
     }
 
     if ( indices.isComplete() )

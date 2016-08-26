@@ -10,15 +10,15 @@ void createBuffer( VkDevice                  device,
                    VkBufferUsageFlags        usage,
                    VkMemoryPropertyFlags     props,
                    VDeleter<VkBuffer>&       buffer,
-                   VDeleter<VkDeviceMemory>& buffer_memory )
+                   VDeleter<VkDeviceMemory>& bufferMemory )
 {
-    VkBufferCreateInfo buffer_info = {};
-    buffer_info.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    buffer_info.size        = size;
-    buffer_info.usage       = usage;
-    buffer_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    VkBufferCreateInfo bufferInfo = {};
+    bufferInfo.sType       = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bufferInfo.size        = size;
+    bufferInfo.usage       = usage;
+    bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-    if ( vkCreateBuffer( device, &buffer_info,
+    if ( vkCreateBuffer( device, &bufferInfo,
                          nullptr, &buffer ) != VK_SUCCESS )
     {
         throw std::runtime_error( "Failed to create buffer!" );
@@ -27,61 +27,61 @@ void createBuffer( VkDevice                  device,
     VkMemoryRequirements memreqs;
     vkGetBufferMemoryRequirements( device, buffer, &memreqs );
 
-    VkMemoryAllocateInfo alloc_info = {};
-    alloc_info.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    alloc_info.allocationSize  = memreqs.size;
-    alloc_info.memoryTypeIndex = findMemoryType( physical,
+    VkMemoryAllocateInfo allocInfo = {};
+    allocInfo.sType           = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocInfo.allocationSize  = memreqs.size;
+    allocInfo.memoryTypeIndex = findMemoryType( physical,
                                                  memreqs.memoryTypeBits,
                                                  props );
 
-    if ( vkAllocateMemory( device, &alloc_info,
-                           nullptr, &buffer_memory ) != VK_SUCCESS )
+    if ( vkAllocateMemory( device, &allocInfo,
+                           nullptr, &bufferMemory ) != VK_SUCCESS )
     {
         throw std::runtime_error( "Failed to allocate buffer memory!" );
     }
 
-    vkBindBufferMemory( device, buffer, buffer_memory, 0 );
+    vkBindBufferMemory( device, buffer, bufferMemory, 0 );
 }
 
 void copyBuffer( VkDevice      device,
                  VkQueue       queue,
-                 VkCommandPool command_pool,
-                 VkBuffer      src_buffer,
-                 VkBuffer      dst_buffer,
+                 VkCommandPool commandPool,
+                 VkBuffer      srcBuffer,
+                 VkBuffer      dstBuffer,
                  VkDeviceSize  size )
 {
-  VkCommandBufferAllocateInfo alloc_info = {};
-  alloc_info.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-  alloc_info.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-  alloc_info.commandPool        = command_pool;
-  alloc_info.commandBufferCount = 1;
+  VkCommandBufferAllocateInfo allocInfo = {};
+  allocInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+  allocInfo.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+  allocInfo.commandPool        = commandPool;
+  allocInfo.commandBufferCount = 1;
 
-  VkCommandBuffer command_buffer;
-  vkAllocateCommandBuffers( device, &alloc_info, &command_buffer );
+  VkCommandBuffer commandBuffer;
+  vkAllocateCommandBuffers( device, &allocInfo, &commandBuffer );
 
-  VkCommandBufferBeginInfo begin_info = {};
-  begin_info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-  begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+  VkCommandBufferBeginInfo beginInfo = {};
+  beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+  beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
-  vkBeginCommandBuffer( command_buffer, &begin_info );
+  vkBeginCommandBuffer( commandBuffer, &beginInfo );
 
-  VkBufferCopy copy_region = {};
-  copy_region.srcOffset = 0;
-  copy_region.dstOffset = 0;
-  copy_region.size      = size;
-  vkCmdCopyBuffer( command_buffer, src_buffer, dst_buffer, 1, &copy_region );
+  VkBufferCopy copyRegion = {};
+  copyRegion.srcOffset = 0;
+  copyRegion.dstOffset = 0;
+  copyRegion.size      = size;
+  vkCmdCopyBuffer( commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion );
 
-  vkEndCommandBuffer( command_buffer );
+  vkEndCommandBuffer( commandBuffer );
 
   VkSubmitInfo submitInfo = {};
   submitInfo.sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
   submitInfo.commandBufferCount = 1;
-  submitInfo.pCommandBuffers    = &command_buffer;
+  submitInfo.pCommandBuffers    = &commandBuffer;
 
   vkQueueSubmit( queue, 1, &submitInfo, VK_NULL_HANDLE );
   vkQueueWaitIdle( queue );
 
-  vkFreeCommandBuffers( device, command_pool, 1, &command_buffer );
+  vkFreeCommandBuffers( device, commandPool, 1, &commandBuffer );
 }
 
 #endif

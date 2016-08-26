@@ -4,25 +4,25 @@
 #include <cstring>
 #include "base-includes.hpp"
 
-const std::vector<const char*> required_device_extensions = {
+const std::vector<const char*> requiredDeviceExtensions = {
   VK_KHR_SWAPCHAIN_EXTENSION_NAME
 };
 
 bool checkDeviceExtensionSupport( VkPhysicalDevice device )
 {
-  uint32_t extension_count;
-  vkEnumerateDeviceExtensionProperties( device, nullptr, &extension_count, nullptr );
-  std::vector<VkExtensionProperties> available_extensions( extension_count );
-  vkEnumerateDeviceExtensionProperties( device, nullptr, &extension_count, available_extensions.data() );
+  uint32_t extensionCount;
+  vkEnumerateDeviceExtensionProperties( device, nullptr, &extensionCount, nullptr );
+  std::vector<VkExtensionProperties> availableExtensions( extensionCount );
+  vkEnumerateDeviceExtensionProperties( device, nullptr, &extensionCount, availableExtensions.data() );
 
   // Ensure all required extensions are available on device
-  for ( const auto& required_ext : required_device_extensions )
+  for ( const auto& requiredExt : requiredDeviceExtensions )
   {
     bool found = false;
 
-    for ( const auto& ext : available_extensions )
+    for ( const auto& ext : availableExtensions )
     {
-      if ( std::strcmp( ext.extensionName, required_ext ) == 0 )
+      if ( std::strcmp( ext.extensionName, requiredExt ) == 0 )
       {
         found = true;
       }

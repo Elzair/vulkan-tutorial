@@ -25,15 +25,15 @@ static std::vector<char> readFile(const std::string& filename)
 
 void createShaderModule( VkDevice device,
                          const std::vector<char>&  code,
-                         VDeleter<VkShaderModule>& shader_module)
+                         VDeleter<VkShaderModule>& shaderModule)
 {
-  VkShaderModuleCreateInfo shader_create_info = {};
-  shader_create_info.sType    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-  shader_create_info.codeSize = code.size();
-  shader_create_info.pCode    = (uint32_t*) code.data();
+  VkShaderModuleCreateInfo shaderCreateInfo = {};
+  shaderCreateInfo.sType    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+  shaderCreateInfo.codeSize = code.size();
+  shaderCreateInfo.pCode    = (uint32_t*) code.data();
 
-  if ( vkCreateShaderModule( device, &shader_create_info,
-                             nullptr, &shader_module ) != VK_SUCCESS )
+  if ( vkCreateShaderModule( device, &shaderCreateInfo,
+                             nullptr, &shaderModule ) != VK_SUCCESS )
   {
     throw std::runtime_error( "Failed to create shader module!" );
   }

@@ -15,8 +15,7 @@ public:
   }
 
 private:
-
-  GLFWwindow* window;
+  GLFWwindow*          window;
   VDeleter<VkInstance> instance { vkDestroyInstance };
   
   void initWindow()
@@ -25,34 +24,30 @@ private:
     
     glfwWindowHint( GLFW_CLIENT_API, GLFW_NO_API );
     glfwWindowHint( GLFW_RESIZABLE, GLFW_FALSE );
-
     
     this->window = glfwCreateWindow( WIDTH, HEIGHT, "Vulkan", nullptr, nullptr );
-    
   }
 
   void createInstance(  )
   {
     VkApplicationInfo appinfo = {};
-    appinfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    appinfo.pApplicationName = "Hello Triangle";
+    appinfo.sType              = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    appinfo.pApplicationName   = "Hello Triangle";
     appinfo.applicationVersion = VK_MAKE_VERSION( 1, 0, 0 );
-    appinfo.pEngineName = "No Engine";
-    appinfo.engineVersion = VK_MAKE_VERSION( 1, 0, 0 );
-    appinfo.apiVersion = VK_API_VERSION_1_0;
+    appinfo.pEngineName        = "No Engine";
+    appinfo.engineVersion      = VK_MAKE_VERSION( 1, 0, 0 );
+    appinfo.apiVersion         = VK_API_VERSION_1_0;
+
+    unsigned int glfwExtensionCount = 0;
+    const char** glfwExtensions;
+    glfwExtensions = glfwGetRequiredInstanceExtensions( &glfwExtensionCount );
 
     VkInstanceCreateInfo crinfo = {};
-    crinfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-    crinfo.pApplicationInfo = &appinfo;
-
-    unsigned int glfw_extension_count = 0;
-    const char** glfw_extensions;
-
-    glfw_extensions = glfwGetRequiredInstanceExtensions( &glfw_extension_count );
-
-    crinfo.enabledExtensionCount = glfw_extension_count;
-    crinfo.ppEnabledExtensionNames = glfw_extensions;
-    crinfo.enabledLayerCount = 0;
+    crinfo.sType                   = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    crinfo.pApplicationInfo        = &appinfo;
+    crinfo.enabledExtensionCount   = glfwExtensionCount;
+    crinfo.ppEnabledExtensionNames = glfwExtensions;
+    crinfo.enabledLayerCount       = 0;
 
     if ( vkCreateInstance( &crinfo, nullptr, &this->instance ) != VK_SUCCESS )
     {
@@ -64,10 +59,10 @@ private:
     }
 
     // Get information on extension properties
-    uint32_t extension_count = 0;
-    vkEnumerateInstanceExtensionProperties( nullptr, &extension_count, nullptr );
-    std::vector<VkExtensionProperties> extensions( extension_count );
-    vkEnumerateInstanceExtensionProperties( nullptr, &extension_count, extensions.data(  ) );
+    uint32_t extensionCount = 0;
+    vkEnumerateInstanceExtensionProperties( nullptr, &extensionCount, nullptr );
+    std::vector<VkExtensionProperties> extensions( extensionCount );
+    vkEnumerateInstanceExtensionProperties( nullptr, &extensionCount, extensions.data(  ) );
 
     std::cout << "Available Extensions:" << std::endl;
     for ( const auto& extension: extensions )

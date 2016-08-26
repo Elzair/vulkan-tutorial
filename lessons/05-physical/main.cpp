@@ -18,7 +18,6 @@ public:
   }
 
 private:
-
   GLFWwindow*                        window;
   VDeleter<VkInstance>               instance { vkDestroyInstance };
   VDeleter<VkDebugReportCallbackEXT> callback { this->instance, DestroyDebugReportCallbackEXT };
@@ -53,7 +52,7 @@ private:
   void createInstance(  )
   {
     // Ensure validation layers are available
-    if ( enable_validation_layers && !this->checkValidationLayerSupport() )
+    if ( enableValidationLayers && !this->checkValidationLayerSupport() )
     {
       throw std::runtime_error( "Validation layers requested but are not available!" );
     }
@@ -72,10 +71,10 @@ private:
     auto vkextensions = this->getRequiredExtensions();
     crinfo.enabledExtensionCount = vkextensions.size();
     crinfo.ppEnabledExtensionNames = vkextensions.data();
-    if ( enable_validation_layers )
+    if ( enableValidationLayers )
     {
-      crinfo.enabledLayerCount   = validation_layers.size(  );
-      crinfo.ppEnabledLayerNames = validation_layers.data(  );
+      crinfo.enabledLayerCount   = validationLayers.size(  );
+      crinfo.ppEnabledLayerNames = validationLayers.data(  );
     }
     else
     {
@@ -92,10 +91,10 @@ private:
     }
 
     // Get information on extension properties
-    uint32_t extension_count = 0;
-    vkEnumerateInstanceExtensionProperties( nullptr, &extension_count, nullptr );
-    std::vector<VkExtensionProperties> extensions( extension_count );
-    vkEnumerateInstanceExtensionProperties( nullptr, &extension_count, extensions.data(  ) );
+    uint32_t extensionCount = 0;
+    vkEnumerateInstanceExtensionProperties( nullptr, &extensionCount, nullptr );
+    std::vector<VkExtensionProperties> extensions( extensionCount );
+    vkEnumerateInstanceExtensionProperties( nullptr, &extensionCount, extensions.data(  ) );
 
     std::cout << "Available Extensions:" << std::endl;
     for ( const auto& extension: extensions )
@@ -106,16 +105,16 @@ private:
 
   bool checkValidationLayerSupport(  )
   {
-    uint32_t layer_count;
-    vkEnumerateInstanceLayerProperties( &layer_count, nullptr );
-    std::vector<VkLayerProperties> available_layers( layer_count );
-    vkEnumerateInstanceLayerProperties( &layer_count, available_layers.data(  ) );
+    uint32_t layerCount;
+    vkEnumerateInstanceLayerProperties( &layerCount, nullptr );
+    std::vector<VkLayerProperties> availableLayers( layerCount );
+    vkEnumerateInstanceLayerProperties( &layerCount, availableLayers.data(  ) );
 
-    for ( const char* layer : validation_layers )
+    for ( const char* layer : validationLayers )
     {
       bool found = false;
 
-      for ( const auto& properties : available_layers )
+      for ( const auto& properties : availableLayers )
       {
         if ( std::strcmp( layer, properties.layerName ) == 0 )
         {
@@ -135,14 +134,14 @@ private:
 
   void pickPhysicalDevice(  )
   {
-    uint32_t dev_count = 0;
-    vkEnumeratePhysicalDevices( this->instance, &dev_count, nullptr);
-    if ( dev_count == 0 )
+    uint32_t devCount = 0;
+    vkEnumeratePhysicalDevices( this->instance, &devCount, nullptr);
+    if ( devCount == 0 )
     {
       throw std::runtime_error( "Failed to find GPUs with Vulkan support!" );
     }
-    std::vector<VkPhysicalDevice> devices( dev_count );
-    vkEnumeratePhysicalDevices( this->instance, &dev_count, devices.data(  ) );
+    std::vector<VkPhysicalDevice> devices( devCount );
+    vkEnumeratePhysicalDevices( this->instance, &devCount, devices.data(  ) );
 
     for ( const auto& device : devices )
     {
@@ -163,16 +162,16 @@ private:
   {
     std::vector<const char*> extensions;
 
-    unsigned int glfw_extension_count = 0;
-    const char** glfw_extensions;
-    glfw_extensions = glfwGetRequiredInstanceExtensions( &glfw_extension_count );
+    unsigned int glfwExtensionCount = 0;
+    const char** glfwExtensions;
+    glfwExtensions = glfwGetRequiredInstanceExtensions( &glfwExtensionCount );
 
-    for ( auto i = 0; i < glfw_extension_count; i++ )
+    for ( auto i = 0; i < glfwExtensionCount; i++ )
     {
-      extensions.push_back( glfw_extensions[ i ] );
+      extensions.push_back( glfwExtensions[ i ] );
     }
 
-    if ( enable_validation_layers )
+    if ( enableValidationLayers )
     {
       extensions.push_back( VK_EXT_DEBUG_REPORT_EXTENSION_NAME );
     }
@@ -191,13 +190,13 @@ private:
 #endif
   static VkBool32 __stdcall debugCallback(
     VkDebugReportFlagsEXT      flags,
-    VkDebugReportObjectTypeEXT obj_type,
+    VkDebugReportObjectTypeEXT objType,
     uint64_t                   obj,
     std::size_t                loc,
     int32_t                    code,
-    const char*                layer_prefix,
+    const char*                layerPrefix,
     const char*                msg,
-    void*                      user_data)
+    void*                      userData)
   {
     std::cerr << "Validation layer: " << msg << std::endl;
     return VK_FALSE;
@@ -205,7 +204,7 @@ private:
 
   void createDebugCallback()
   {
-    if ( !enable_validation_layers )
+    if ( !enableValidationLayers )
     {
       return;
     }
