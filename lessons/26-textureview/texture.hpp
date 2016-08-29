@@ -64,8 +64,6 @@ void transitionImageLayout( VkDevice      device,
 {
   VkCommandBuffer commandBuffer = beginSingleTimeCommands( device, commandPool );
 
-  endSingleTimeCommands( device, queue, commandPool, commandBuffer );
-
   // Create memory barrier
   VkImageMemoryBarrier barrier = {};
   barrier.sType                           = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -116,6 +114,8 @@ void transitionImageLayout( VkDevice      device,
                         nullptr,
                         1,
                         &barrier );
+
+  endSingleTimeCommands( device, queue, commandPool, commandBuffer );
 }
 
 void copyImage( VkDevice      device,
@@ -127,8 +127,6 @@ void copyImage( VkDevice      device,
                 uint32_t      height )
 {
   VkCommandBuffer commandBuffer = beginSingleTimeCommands( device, commandPool );
-
-  endSingleTimeCommands( device, queue, commandPool, commandBuffer );
 
   VkImageSubresourceLayers subResource = {};
   subResource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -152,6 +150,8 @@ void copyImage( VkDevice      device,
                   VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                   1,
                   &region );
+
+  endSingleTimeCommands( device, queue, commandPool, commandBuffer );
 }
 
 
