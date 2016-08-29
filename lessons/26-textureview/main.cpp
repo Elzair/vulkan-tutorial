@@ -983,7 +983,7 @@ private:
     VkDescriptorSetLayout layouts[] = { this->descriptorSetLayout };
     VkDescriptorSetAllocateInfo allocInfo = {};
     allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-    allocInfo.descriptorPool     = descriptorPool;
+    allocInfo.descriptorPool     = this->descriptorPool;
     allocInfo.descriptorSetCount = 1;
     allocInfo.pSetLayouts        = layouts;
 
@@ -996,7 +996,7 @@ private:
 
     // Now create buffer to hold descriptor data
     VkDescriptorBufferInfo bufferInfo = {};
-    bufferInfo.buffer = uniformBuffer;
+    bufferInfo.buffer = this->uniformBuffer;
     bufferInfo.offset = 0;
     bufferInfo.range  = sizeof(UniformBufferObject);
 
